@@ -1,0 +1,5 @@
+﻿  Game.cpp
+c:\users\александр\source\repos\sfmlsetup\sfmlsetup\game.cpp(190): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\александр\source\repos\sfmlsetup\sfmlsetup\game.cpp(315): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\александр\source\repos\sfmlsetup\sfmlsetup\game.cpp(343): warning C4018: <: несоответствие типов со знаком и без знака
+  sfmlSetup.vcxproj -> C:\Users\Александр\source\repos\sfmlSetup\Debug\sfmlSetup.exe
