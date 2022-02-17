@@ -15,24 +15,29 @@ private:
 	int damage;
 	int points;
 
+	
+
 	void initVariables();
 	void initShape();
 
 public:
 	Enemy(float pos_x, float pos_y);
 	virtual ~Enemy();
-
+	
 	//Getters
 	const sf::FloatRect getBounds() const;
 	const int& getPoints() const;
 	const int& getDamage() const;
 	const int& getHP() const;
 	const int& getHpMax() const;
-
+	const float& getSpeed() const;
+	
+	
 	//Functions
 	void loseHp(const int value);
 	void update();
 	void render(sf::RenderTarget* target);
+
 };
 
 #endif //!ENEMY_H

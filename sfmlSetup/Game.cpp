@@ -1,5 +1,4 @@
 #include "Game.h"
-
 //Init everything
 void Game::initWindow()
 {
@@ -28,13 +27,14 @@ void Game::initGUI()
 	this->pointText.setCharacterSize(30);
 	this->pointText.setFillColor(sf::Color::White);
 
+	//Init gameOverText
 	this->gameOverText.setFont(this->font);
 	this->gameOverText.setCharacterSize(60);
 	this->gameOverText.setFillColor(sf::Color::Red);
 	this->gameOverText.setString("Game Over!");
 	this->gameOverText.setPosition(
 		this->window->getSize().x / 2.f - this->gameOverText.getGlobalBounds().width / 2.f,
-		this->window->getSize().y / 2.f - this->gameOverText.getGlobalBounds().height / 2.f);
+		this->window->getSize().y / 2.f - this->gameOverText.getGlobalBounds().height);
 
 	//Init player GUI
 	this->playerHpBar.setSize(sf::Vector2f(300.f, 30.f));
@@ -43,6 +43,17 @@ void Game::initGUI()
 
 	this->playerHpBarBack = this->playerHpBar;
 	this->playerHpBarBack.setFillColor(sf::Color(25, 25, 25, 200));
+	   
+	//Init restartButton
+	if (!this->restartButtonTex.loadFromFile("Textures/restart1.png"))
+	{
+		std::cout << "ERROR: COULD NOT LOAD RESTART BUTTON TEXTURE" << std::endl;
+	}
+	this->restartButton.setTexture(restartButtonTex);
+	this->restartButton.setScale(0.3f, 0.3f);
+	this->restartButton.setPosition(
+		this->window->getSize().x / 2.f - this->restartButton.getGlobalBounds().width / 2,
+		this->window->getSize().y / 2.f + this->restartButton.getGlobalBounds().height);
 }
 
 void Game::initWorld()
@@ -113,8 +124,10 @@ Game::~Game()
 	}
 }
 
+
+
 //Functions
-void Game::run()
+bool Game::run()
 {
 	while (this->window->isOpen())
 	{
@@ -124,6 +137,16 @@ void Game::run()
 			this->update();
 
 		this->render();
+
+		if (sf::Mouse::getPosition(*window).x >= this->restartButton.getGlobalBounds().left && 
+			sf::Mouse::getPosition(*window).x <= this->restartButton.getGlobalBounds().width / 2 + this->window->getSize().x / 2 &&
+			sf::Mouse::getPosition(*window).y >= this->restartButton.getGlobalBounds().top &&
+			sf::Mouse::getPosition(*window).y <= this->restartButton.getGlobalBounds().top + this->restartButton.getGlobalBounds().height &&
+			sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
+			this->player->getHp() == 0)
+	
+			return true;
+		
 	}
 }
 
@@ -205,10 +228,12 @@ void Game::updateGUI()
 	ss << "Score: " << this->points;
 
 	this->pointText.setString(ss.str());
-
+	
 	//Update player GUI
 	float hpPercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
 	this->playerHpBar.setSize(sf::Vector2f(300.f * hpPercent, this->playerHpBar.getSize().y));
+
+	
 }
 
 void Game::updateCollision()
@@ -281,16 +306,20 @@ void Game::updateEnemies()
 	this->spawnTimer += 0.5f;
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x - 20.f, -100.f));
+		float x, y;
+		x = rand() % this->window->getSize().x - 20.f; 
+		y = -100.f;
+		this->enemies.push_back(new Enemy(x, y));
+
 		this->spawnTimer = 0.f;
 	}
 
-	//Update
+	
 	unsigned counter = 0;
 	for (auto *enemy : this->enemies)
 	{
 		enemy->update();
-
+		
 		//Bullet culling (top of screen)
 		if (enemy->getBounds().top > this->window->getSize().y)
 		{
@@ -430,7 +459,9 @@ void Game::render()
 
 	//Game over screen
 	if (this->player->getHp() <= 0)
+	{	
 		this->window->draw(this->gameOverText);
-
+		this->window->draw(this->restartButton);
+	}
 	this->window->display();
 }

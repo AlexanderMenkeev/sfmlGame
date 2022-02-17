@@ -1,5 +1,6 @@
 #include "Enemy.h"
 
+
 void Enemy::initVariables()
 {
 	this->pointCount = rand() % 8 + 3; //min = 3 max = 10
@@ -13,19 +14,16 @@ void Enemy::initVariables()
 
 void Enemy::initShape()
 {
-	this->shape.setRadius(this->pointCount * 5);
+	this->shape.setRadius(this->pointCount * 5 + 5);
 	this->shape.setPointCount(this->pointCount);
-	this->shape.setFillColor(sf::Color(rand() % 255 + 1, rand() % 255 + 1, rand() % 255 + 1, 255));
+	this->shape.setFillColor(sf::Color(rand() % 255, rand() % 255, rand() % 255, 255));
 }
-
 Enemy::Enemy(float pos_x, float pos_y)
 {
 	this->initVariables();
 	this->initShape();
-
 	this->shape.setPosition(pos_x, pos_y);
 }
-
 Enemy::~Enemy()
 {
 
@@ -36,12 +34,10 @@ const sf::FloatRect Enemy::getBounds() const
 {
 	return this->shape.getGlobalBounds();
 }
-
 const int& Enemy::getPoints() const
 {
 	return this->points;
 }
-
 const int& Enemy::getHP() const
 {
 	return this->hp;
@@ -50,10 +46,15 @@ const int& Enemy::getHpMax() const
 {
 	return this->hpMax;
 }
+const float & Enemy::getSpeed() const
+{
+	return this->speed;
+}
 const int& Enemy::getDamage() const
 {
 	return this->damage;
 }
+
 
 //Functions
 void Enemy::loseHp(const int value)
@@ -62,12 +63,10 @@ void Enemy::loseHp(const int value)
 	if (this->hp < 0)
 		this->hp = 0;
 }
-
 void Enemy::update()
 {
 	this->shape.move(0.f, this->speed);
 }
-
 void Enemy::render(sf::RenderTarget * target)
 {
 	target->draw(this->shape);

@@ -22,9 +22,11 @@ private:
 	//GUI
 	sf::Font font;
 	sf::Text pointText;
-
+	sf::Texture restartButtonTex;
+	sf::Sprite restartButton;
 	sf::Text gameOverText;
 
+	
 	//World
 	sf::Texture worldBackgroundTex;
 	sf::Sprite worldBackground;
@@ -38,6 +40,7 @@ private:
 	//PlayerGUI
 	sf::RectangleShape playerHpBar;
 	sf::RectangleShape playerHpBarBack;
+
 
 	//Enemies
 	float spawnTimer;
@@ -58,7 +61,8 @@ public:
 	virtual ~Game();
 
 	//Functions
-	void run();
+	
+	bool run();
 
 	void updatePollEvents();
 	void updateInput();
@@ -68,7 +72,9 @@ public:
 	void updateMissiles();
 	void updateEnemies();
 	void updateCombat();
+	
 	void update();
+
 
 	void renderGUI();
 	void renderWorld();
